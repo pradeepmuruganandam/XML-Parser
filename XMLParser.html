@@ -1,0 +1,171 @@
+
+<html>
+
+<head>
+<title > Input - Assignment 4 - XML Parsing </title>
+<script type = "text/javascript">
+	function loadXMLDoc(filename)
+	{
+		if (window.XMLHttpRequest)
+  		{
+  		xhttp=new XMLHttpRequest();
+  		}
+  		xhttp.open("GET",filename,false);
+  		xhttp.send();
+  		return xhttp.responseXML;
+	}
+  	function LinkCheck(url)
+	{	
+		//alert("In Link check");
+		var http = new XMLHttpRequest();
+    	http.open('HEAD', url, false);
+    	http.send();
+    	return http.status!=404;
+	}
+</script>
+</head>
+
+<script>
+	
+function parseXML(){
+
+	if(document.getElementById('url').value == ''){
+		alert('Enter some URL and then click on the button');
+		return null;
+	}
+	var filename = document.getElementById('url').value;
+	
+	if(LinkCheck(filename) != true){
+		alert("Link does not exist");
+		return null;
+	}
+
+	xmlDoc=loadXMLDoc(filename);
+	if (xmlDoc.documentElement.nodeName == "parsererror")
+  	{
+  		errStr = xmlDoc.documentElement.childNodes[0].nodeValue;
+  		alert("Error in XML File");
+  		alert("Parse error - " + errStr);
+  		return null;
+  	}
+	
+  	var x = xmlDoc.getElementsByTagName("Listing");
+	
+	if (x.length == 0){
+		alert("No listing entry in XML file");
+		var myWindow = window.open()
+		myWindow.document.write("No Listing entry in the given XML File");
+		myWindow.document.close();
+		return null;
+	}
+	else{
+		var myWindow = window.open();
+		myWindow.document.write("<html><head><title> Real Estate Listings </title> </head><b><h2>Real Estate Listings</h2></b><br/>")
+		myWindow.document.write("<table border='1'>");
+		myWindow.document.write("<table border = \"1\" width=\"60%\">"); 
+
+		for (i=0;i<x.length;i++)
+  		{
+  			myWindow.document.write("<tr><th colspan=\"7\"> Listing </th></tr> <tr> <th> Location </th> <th> Street </th><th> City </th> <th> State </th> <th> Zip </th> <th> Lat </th> <th> Long </th> </tr>");
+  			myWindow.document.write("<tr><td> &nbsp; </td>");
+ 			var y = x[i].getElementsByTagName("Location");
+
+ 			var str = y[0].getElementsByTagName("StreetAddress");
+ 			myWindow.document.write("<td>&nbsp;");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+ 		
+ 			var str = y[0].getElementsByTagName("City");
+ 			myWindow.document.write("<td>&nbsp;");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+
+ 			myWindow.document.write("<td border = \"1\">&nbsp;");	
+ 			var str = y[0].getElementsByTagName("State");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+
+ 			var str = y[0].getElementsByTagName("Zip");	
+ 			myWindow.document.write("<td>&nbsp;");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+
+ 			var str = y[0].getElementsByTagName("Lat");	
+ 			myWindow.document.write("<td>&nbsp;");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+ 			
+ 			var str = y[0].getElementsByTagName("Long");	
+ 			myWindow.document.write("<td>&nbsp;");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+ 			myWindow.document.write("</tr>");	
+
+ 			myWindow.document.write("<tr> <th> Details </th> <th> Status </th><th> Price </th> <th> Listing URL </th> <th colspan=\"3\"> Image</th>    </tr>");
+ 			myWindow.document.write("<tr><td> &nbsp; </td>");
+ 			var y = x[i].getElementsByTagName("ListingDetails");
+ 			myWindow.document.write("<td>&nbsp;");
+ 			var str = y[0].getElementsByTagName("Status");	
+ 			//myWindow.document.write("<td>");
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+
+ 			myWindow.document.write("<td>&nbsp;");
+ 			var str = y[0].getElementsByTagName("Price");	
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write(str[j].childNodes[0].nodeValue);
+ 			}
+ 			myWindow.document.write("</td>");
+
+ 			myWindow.document.write("<td>&nbsp;");
+ 			var str = y[0].getElementsByTagName("ListingUrl");	
+ 			for(j = 0; j < str.length; j++){
+ 				myWindow.document.write("<a href = \" "+ str[j].childNodes[0].nodeValue + " \"> Link to Listing</a>");
+ 			}
+ 			myWindow.document.write("</td>");
+ 			
+ 			myWindow.document.write("<td colspan =\"3\"> &nbsp;");
+ 			var str = y[0].getElementsByTagName("Image");	
+ 			for(j = 0; j < str.length; j++){
+ 				//myWindow.document.write("<td colspan =\"3\"><img src =\"http://cs-server.usc.edu:45678/hw/hw4/"+str[j].childNodes[0].nodeValue+" \"></img></td>");
+ 				//alert(str[j].childNodes[0].nodeValue) width=\"100%\" height=\"100%\"
+ 				myWindow.document.write("<img src =\""+str[j].childNodes[0].nodeValue+"\" width=300px height=250px></img>");
+ 				myWindow.document.write("</td>");
+ 				myWindow.document.write("</tr>");
+ 			}
+ 	}
+ 	myWindow.document.write("</table>");
+ 	document.close();
+ 	myWindow.document.close();
+ 	
+	}
+}
+</script>
+<div id = "input_block" style = "text-align:center">
+	<br/><br/>
+	<center> <b> Enter URL for Real Estate Catalog XML File </b></center><br/>
+	<input type = "text" id = "url" > </input><br/><br/>
+	<input id="clickMe" type="button" value="Submit Query" onclick="parseXML();"></input>
+
+</div>
+<NOSCRIPT>
+
+</html>
+
+
+
+
